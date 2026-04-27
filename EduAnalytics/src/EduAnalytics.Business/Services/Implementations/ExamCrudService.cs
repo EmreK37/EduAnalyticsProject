@@ -30,6 +30,14 @@ public class ExamCrudService : IExamCrudService
             .ToListAsync();
     }
 
+    // YENİ EKLENEN METOT: Tüm öğrencileri getirir
+    public async Task<List<Student>> GetStudentsAsync()
+    {
+        return await _context.Students
+            .OrderBy(s => s.StudentNumber)
+            .ToListAsync();
+    }
+
     public async Task<int> CreateExamAsync(ExamCreateModel model)
     {
         if (string.IsNullOrWhiteSpace(model.Title))
@@ -82,19 +90,17 @@ public class ExamCrudService : IExamCrudService
         }
         await _context.SaveChangesAsync();
 
-        // ──────────────── YENİ EKLENEN ÖĞRENCİ İŞLEMLERİ ────────────────
+        // ÖĞRENCİ İŞLEMLERİ
         if (model.Students != null && model.Students.Any())
         {
             var incomingNumbers = model.Students.Select(s => s.StudentNumber).ToList();
 
-            // Zaten var olan öğrencileri bul
             var existingStudents = await _context.Students
                 .Where(s => incomingNumbers.Contains(s.StudentNumber))
                 .ToListAsync();
 
             var existingNumbers = existingStudents.Select(s => s.StudentNumber).ToHashSet();
 
-            // Yeni eklenecekleri ayırt et
             var newStudents = model.Students
                 .Where(ms => !existingNumbers.Contains(ms.StudentNumber))
                 .Select(ms => new Student
@@ -109,12 +115,10 @@ public class ExamCrudService : IExamCrudService
             {
                 _context.Students.AddRange(newStudents);
                 await _context.SaveChangesAsync();
-                
-                // Yeni öğrencileri listeye dahil et
+
                 existingStudents.AddRange(newStudents);
             }
 
-            // Derse (CourseId) kayıtlı olanları bul
             var currentEnrollments = await _context.StudentCourses
                 .Where(sc => sc.CourseId == model.CourseId)
                 .Select(sc => sc.StudentId)
@@ -122,7 +126,6 @@ public class ExamCrudService : IExamCrudService
 
             var newEnrollments = new List<StudentCourse>();
 
-            // Eğer bu öğrenciler bu derse daha önce eklenmemişse onları ekle
             foreach (var st in existingStudents)
             {
                 if (!currentEnrollments.Contains(st.Id))
@@ -141,7 +144,6 @@ public class ExamCrudService : IExamCrudService
                 await _context.SaveChangesAsync();
             }
         }
-        // ───────────────────────────────────────────────────────────────
 
         await tx.CommitAsync();
 

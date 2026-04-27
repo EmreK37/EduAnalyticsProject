@@ -11,7 +11,7 @@ public partial class ExamCreateViewModel : ObservableObject
 {
     private readonly IExamCrudService _service;
 
-    public event Action? ExamSaved;  // Kayıt başarılı olunca Dashboard'a dönmek için
+    public event Action? ExamSaved;
 
     [ObservableProperty] private ObservableCollection<Course> _courses = new();
     [ObservableProperty] private ObservableCollection<Topic> _availableTopics = new();
@@ -28,8 +28,13 @@ public partial class ExamCreateViewModel : ObservableObject
     [ObservableProperty] private string? _errorMessage;
     [ObservableProperty] private string? _successMessage;
 
-    // YENİ EKLENEN ÖĞRENCİ VERİ GİRİŞ ALANI
-    [ObservableProperty] private string _studentInputText = string.Empty;
+    // ÖĞRENCİ SEÇİMİ VE FİLTRELEME ALANLARI
+    [ObservableProperty] private ObservableCollection<StudentSelectionViewModel> _allStudents = new();
+    [ObservableProperty] private ObservableCollection<StudentSelectionViewModel> _filteredStudents = new();
+    [ObservableProperty] private ObservableCollection<string> _availableClasses = new();
+
+    [ObservableProperty]
+    private string? _selectedClass;
 
     public ExamCreateViewModel(IExamCrudService service)
     {
@@ -45,11 +50,29 @@ public partial class ExamCreateViewModel : ObservableObject
             var courses = await _service.GetCoursesAsync();
             Courses = new ObservableCollection<Course>(courses);
 
-            // Varsayılan olarak ilk dersi seç (hızlı form için)
             if (SelectedCourse == null && courses.Count > 0)
             {
                 SelectedCourse = courses[0];
             }
+
+            // Öğrencileri yükle
+            var students = await _service.GetStudentsAsync();
+            var studentVms = students.Select(s => new StudentSelectionViewModel
+            {
+                Id = s.Id,
+                StudentNumber = s.StudentNumber,
+                FullName = s.FullName,
+                ClassName = s.ClassName,
+                IsSelected = false
+            }).ToList();
+
+            AllStudents = new ObservableCollection<StudentSelectionViewModel>(studentVms);
+
+            // Filtreleme için sınıfları al
+            var classes = students.Select(s => s.ClassName).Distinct().OrderBy(c => c).ToList();
+            classes.Insert(0, "Tümü");
+            AvailableClasses = new ObservableCollection<string>(classes);
+            SelectedClass = "Tümü";
         }
         catch (Exception ex)
         {
@@ -57,9 +80,34 @@ public partial class ExamCreateViewModel : ObservableObject
         }
     }
 
-    /// <summary>
-    /// Ders seçildiğinde o dersin konularını yükler.
-    /// </summary>
+    // Sınıf filtresi değiştiğinde listeyi güncelle
+    partial void OnSelectedClassChanged(string? value)
+    {
+        if (string.IsNullOrEmpty(value) || value == "Tümü")
+        {
+            FilteredStudents = new ObservableCollection<StudentSelectionViewModel>(AllStudents);
+        }
+        else
+        {
+            var filtered = AllStudents.Where(s => s.ClassName == value);
+            FilteredStudents = new ObservableCollection<StudentSelectionViewModel>(filtered);
+        }
+    }
+
+    [RelayCommand]
+    private void SelectAllFiltered()
+    {
+        foreach (var student in FilteredStudents)
+            student.IsSelected = true;
+    }
+
+    [RelayCommand]
+    private void DeselectAllFiltered()
+    {
+        foreach (var student in FilteredStudents)
+            student.IsSelected = false;
+    }
+
     partial void OnSelectedCourseChanged(Course? value)
     {
         _ = ReloadTopicsAsync();
@@ -78,7 +126,6 @@ public partial class ExamCreateViewModel : ObservableObject
             var topics = await _service.GetTopicsForCourseAsync(SelectedCourse.Id);
             AvailableTopics = new ObservableCollection<Topic>(topics);
 
-            // Mevcut soruların AvailableTopics referanslarını güncelle
             foreach (var q in Questions)
             {
                 q.AvailableTopics.Clear();
@@ -108,7 +155,6 @@ public partial class ExamCreateViewModel : ObservableObject
         if (q != null)
         {
             Questions.Remove(q);
-            // Numaralandırmayı yeniden yap
             for (int i = 0; i < Questions.Count; i++)
                 Questions[i].QuestionNumber = i + 1;
         }
@@ -141,7 +187,6 @@ public partial class ExamCreateViewModel : ObservableObject
         if (index > 0)
         {
             Questions.Move(index, index - 1);
-            // Sıralama değiştiği için numaraları güncelle
             for (int i = 0; i < Questions.Count; i++)
                 Questions[i].QuestionNumber = i + 1;
         }
@@ -155,7 +200,6 @@ public partial class ExamCreateViewModel : ObservableObject
         if (index >= 0 && index < Questions.Count - 1)
         {
             Questions.Move(index, index + 1);
-            // Sıralama değiştiği için numaraları güncelle
             for (int i = 0; i < Questions.Count; i++)
                 Questions[i].QuestionNumber = i + 1;
         }
@@ -167,15 +211,14 @@ public partial class ExamCreateViewModel : ObservableObject
         ErrorMessage = null;
         SuccessMessage = null;
 
-        // Genel doÄŸrulamalar
         if (SelectedCourse == null)
         {
-            ErrorMessage = "Ders seÃ§melisiniz.";
+            ErrorMessage = "Ders seçmelisiniz.";
             return;
         }
         if (string.IsNullOrWhiteSpace(Title))
         {
-            ErrorMessage = "SÄ±nav baÅŸlÄ±ÄğÄ± boÅŸ olamaz.";
+            ErrorMessage = "Sınav başlığı boş olamaz.";
             return;
         }
         if (Questions.Count == 0)
@@ -184,7 +227,6 @@ public partial class ExamCreateViewModel : ObservableObject
             return;
         }
 
-        // Soru bazlÄ± doÄŸrulama
         foreach (var q in Questions)
         {
             var err = q.Validate();
@@ -195,25 +237,16 @@ public partial class ExamCreateViewModel : ObservableObject
             }
         }
 
-        // Öğrenci Ayrıştırması
-        var studentModels = new List<StudentCreateModel>();
-        if (!string.IsNullOrWhiteSpace(StudentInputText))
-        {
-            var lines = StudentInputText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
+        // Yeni mantıkla seçili öğrencileri alıyoruz
+        var studentModels = AllStudents
+            .Where(s => s.IsSelected)
+            .Select(s => new StudentCreateModel
             {
-                var parts = line.Split(',', StringSplitOptions.TrimEntries);
-                if (parts.Length >= 2)
-                {
-                    studentModels.Add(new StudentCreateModel
-                    {
-                        StudentNumber = parts[0],
-                        FullName = parts[1],
-                        ClassName = parts.Length > 2 ? parts[2] : "Tanımsız Sınıf"
-                    });
-                }
-            }
-        }
+                StudentNumber = s.StudentNumber,
+                FullName = s.FullName,
+                ClassName = s.ClassName
+            })
+            .ToList();
 
         IsSaving = true;
         try
@@ -230,19 +263,21 @@ public partial class ExamCreateViewModel : ObservableObject
             };
 
             var newId = await _service.CreateExamAsync(model);
-            SuccessMessage = $"SÄ±nav baÅŸarÄ±yla kaydedildi. Id: {newId}";
+            SuccessMessage = $"Sınav başarıyla kaydedildi. Id: {newId}";
 
             // Formu temizle
             Title = string.Empty;
             Questions.Clear();
-            StudentInputText = string.Empty;
+
+            // Seçimleri sıfırla
+            foreach (var s in AllStudents) s.IsSelected = false;
 
             ExamSaved?.Invoke();
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"KayÄ±t hatasÄ±: {ex.Message}" +
-                           (ex.InnerException != null ? $" â€” {ex.InnerException.Message}" : "");
+            ErrorMessage = $"Kayıt hatası: {ex.Message}" +
+                           (ex.InnerException != null ? $" — {ex.InnerException.Message}" : "");
         }
         finally
         {

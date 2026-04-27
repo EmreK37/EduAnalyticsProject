@@ -9,102 +9,120 @@
              mc:Ignorable="d"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
 
-    <UserControl.Resources>
-        <ObjectDataProvider x:Key="QuestionTypeValues"
+	<UserControl.Resources>
+		<ObjectDataProvider x:Key="QuestionTypeValues"
                             MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="enums:QuestionType"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-    </UserControl.Resources>
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="enums:QuestionType"/>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+	</UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
 
-        <!-- BAŞLIK -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Yeni Sınav Oluştur" Style="{StaticResource HeadingStyle}"/>
-            <TextBlock Text="Karma sınav yapabilirsiniz: test ve klasik sorular bir arada."
+		<StackPanel Grid.Row="0" Margin="0,0,0,16">
+			<TextBlock Text="Yeni Sınav Oluştur" Style="{StaticResource HeadingStyle}"/>
+			<TextBlock Text="Karma sınav yapabilirsiniz: test ve klasik sorular bir arada."
                        Foreground="{StaticResource TextSecondaryBrush}"/>
-        </StackPanel>
+		</StackPanel>
 
-        <!-- ANA İÇERİK -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
-            <StackPanel>
-                <!-- SINAV META BİLGİLERİ -->
-                <Border Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Sınav Bilgileri" Style="{StaticResource SubheadingStyle}"/>
+		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+			<StackPanel>
+				<Border Style="{StaticResource CardStyle}">
+					<StackPanel>
+						<TextBlock Text="Sınav Bilgileri" Style="{StaticResource SubheadingStyle}"/>
 
-                        <Grid Margin="0,8,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+						<Grid Margin="0,8,0,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="16"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Ders"
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Ders"
                                        FontWeight="SemiBold" Margin="0,0,0,4"/>
-                            <ComboBox Grid.Row="1" Grid.Column="0"
+							<ComboBox Grid.Row="1" Grid.Column="0"
                                       ItemsSource="{Binding Courses}"
                                       SelectedItem="{Binding SelectedCourse}"
                                       DisplayMemberPath="Name"
                                       Padding="8,6" FontSize="14"
                                       Margin="0,0,0,16"/>
 
-                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Sınav Tarihi"
+							<TextBlock Grid.Row="0" Grid.Column="2" Text="Sınav Tarihi"
                                        FontWeight="SemiBold" Margin="0,0,0,4"/>
-                            <DatePicker Grid.Row="1" Grid.Column="2"
+							<DatePicker Grid.Row="1" Grid.Column="2"
                                         SelectedDate="{Binding ExamDate}"
                                         Padding="8,6" FontSize="14"
                                         Margin="0,0,0,16"/>
 
-                            <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Text="Sınav Başlığı / Konusu"
+							<TextBlock Grid.Row="2" Grid.ColumnSpan="3" Text="Sınav Başlığı / Konusu"
                                        FontWeight="SemiBold" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="3" Grid.ColumnSpan="3"
+							<TextBox Grid.Row="3" Grid.ColumnSpan="3"
                                      Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                      Padding="8,6" FontSize="14"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+						</Grid>
+					</StackPanel>
+				</Border>
 
-                <!-- ÖĞRENCİ EKLEME BÖLÜMÜ (YENİ) -->
-                <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
-                    <StackPanel>
-                        <TextBlock Text="Sınava Girecek Öğrenciler (Toplu Ekleme)"
-                                   Style="{StaticResource SubheadingStyle}"/>
-                        
-                        <TextBlock Text="Öğrencileri listeye aşağıdaki formatta alt alta yazarak kopyala-yapıştır yapabilirsiniz:"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   FontSize="12" Margin="0,0,0,4"/>
-                        <TextBlock Text="[Öğrenci No], [Ad Soyad], [Sınıf] (Örn: 2001, Ali Veli, A Şubesi)"
-                                   FontFamily="Consolas" Foreground="{StaticResource PrimaryBrush}"
-                                   FontSize="12" Margin="0,0,0,8" FontWeight="SemiBold"/>
+				<Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+					<StackPanel>
+						<TextBlock Text="Sınava Girecek Öğrencileri Seçin" Style="{StaticResource SubheadingStyle}"/>
 
-                        <TextBox Text="{Binding StudentInputText, UpdateSourceTrigger=PropertyChanged}"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 MinHeight="80" MaxHeight="150"
-                                 Padding="8,6"
-                                 FontSize="13" FontFamily="Consolas"
-                                 BorderBrush="{StaticResource BorderBrush}"
-                                 BorderThickness="1"/>
-                    </StackPanel>
-                </Border>
+						<StackPanel Orientation="Horizontal" Margin="0,8,0,12">
+							<TextBlock Text="Sınıf/Bölüm Filtresi:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
+							<ComboBox ItemsSource="{Binding AvailableClasses}"
+                                      SelectedItem="{Binding SelectedClass}"
+                                      Width="180" Padding="6,4"/>
 
-                <!-- BUTON BAR: Puan Dağıt vs -->
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,16,0,0">
-                    <Button Content="💯 100 Puana Eşitle"
+							<Button Content="✓ Tümünü Seç"
+                                    Command="{Binding SelectAllFilteredCommand}"
+                                    Margin="16,0,8,0" Padding="12,4"
+                                    Background="#D1FAE5" Foreground="#064E3B"
+                                    BorderThickness="0" Cursor="Hand" FontWeight="SemiBold"/>
+
+							<Button Content="✕ Tümünü Kaldır"
+                                    Command="{Binding DeselectAllFilteredCommand}"
+                                    Padding="12,4"
+                                    Background="#FEE2E2" Foreground="#991B1B"
+                                    BorderThickness="0" Cursor="Hand" FontWeight="SemiBold"/>
+						</StackPanel>
+
+						<Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Height="220">
+							<ScrollViewer VerticalScrollBarVisibility="Auto" Padding="4">
+								<ItemsControl ItemsSource="{Binding FilteredStudents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<CheckBox IsChecked="{Binding IsSelected}" Margin="8,6" Cursor="Hand">
+												<TextBlock FontSize="14">
+													<Run Text="{Binding StudentNumber}" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}"/>
+													<Run Text=" - "/>
+													<Run Text="{Binding FullName}"/>
+													<Run Text=" (" Foreground="{StaticResource TextSecondaryBrush}"/>
+													<Run Text="{Binding ClassName}" Foreground="{StaticResource TextSecondaryBrush}"/>
+													<Run Text=")" Foreground="{StaticResource TextSecondaryBrush}"/>
+												</TextBlock>
+											</CheckBox>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+					</StackPanel>
+				</Border>
+
+				<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,16,0,0">
+					<Button Content="💯 100 Puana Eşitle"
                             Command="{Binding DistributePointsTo100Command}"
                             Background="#F3F4F6"
                             Foreground="{StaticResource PrimaryBrush}"
@@ -115,88 +133,75 @@
                             FontWeight="SemiBold"
                             ToolTip="Toplam puanı 100 olacak şekilde tüm sorulara eşit dağıtır."
                             Width="180">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="4"/>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
+						<Button.Resources>
+							<Style TargetType="Border">
+								<Setter Property="CornerRadius" Value="4"/>
+							</Style>
+						</Button.Resources>
+					</Button>
+				</StackPanel>
 
-                    <Button Content="Öğrenci Listele"
-                            Command="{Binding ListStudentsCommand}"
-                            Background="{StaticResource SuccessBrush}"
-                            Foreground="White"
-                            Padding="12,6"
-                            BorderThickness="0"
-                            Margin="8,0,0,0"
-                            Cursor="Hand"
-                            FontWeight="SemiBold"
-                            Width="180"/>
-                </StackPanel>
+				<ItemsControl ItemsSource="{Binding Questions}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Style="{StaticResource CardStyle}" Padding="16" Margin="0,16,0,0">
+								<StackPanel>
+									<Grid Margin="0,0,0,12">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="16"/>
+											<ColumnDefinition Width="140"/>
+											<ColumnDefinition Width="16"/>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="Auto"/>
+										</Grid.ColumnDefinitions>
 
-                <!-- SORULAR LİSTESİ -->
-                <ItemsControl ItemsSource="{Binding Questions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Style="{StaticResource CardStyle}" Padding="16">
-                                <StackPanel>
-                                    <!-- Soru başlık satırı -->
-                                    <Grid Margin="0,0,0,12">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="16"/>
-                                            <ColumnDefinition Width="140"/>
-                                            <ColumnDefinition Width="16"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Grid.Column="0" VerticalAlignment="Center"
+										<TextBlock Grid.Column="0" VerticalAlignment="Center"
                                                    FontSize="16" FontWeight="Bold"
                                                    Foreground="{StaticResource PrimaryBrush}">
-                                            <Run Text="Soru "/>
-                                            <Run Text="{Binding QuestionNumber}"/>
-                                        </TextBlock>
+											<Run Text="Soru "/>
+											<Run Text="{Binding QuestionNumber}"/>
+										</TextBlock>
 
-                                        <ComboBox Grid.Column="2"
+										<ComboBox Grid.Column="2"
                                                   ItemsSource="{Binding Source={StaticResource QuestionTypeValues}}"
                                                   SelectedItem="{Binding Type}"
                                                   Padding="8,4" VerticalAlignment="Center">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock>
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Text" Value="{Binding}"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding}" Value="MultipleChoice">
-                                                                        <Setter Property="Text" Value="📝 Test"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding}" Value="OpenEnded">
-                                                                        <Setter Property="Text" Value="✏ Klasik"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock>
+														<TextBlock.Style>
+															<Style TargetType="TextBlock">
+																<Setter Property="Text" Value="{Binding}"/>
+																<Style.Triggers>
+																	<DataTrigger Binding="{Binding}" Value="MultipleChoice">
+																		<Setter Property="Text" Value="📝 Test"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding}" Value="OpenEnded">
+																		<Setter Property="Text" Value="✏ Klasik"/>
+																	</DataTrigger>
+																</Style.Triggers>
+															</Style>
+														</TextBlock.Style>
+													</TextBlock>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
 
-                                        <TextBlock Grid.Column="4" Text="Puan:"
+										<TextBlock Grid.Column="4" Text="Puan:"
                                                    VerticalAlignment="Center" FontWeight="SemiBold"/>
-                                        <TextBox Grid.Column="5"
+										<TextBox Grid.Column="5"
                                                  Text="{Binding MaxPoints, UpdateSourceTrigger=PropertyChanged}"
                                                  Width="60" Padding="6,4"
                                                  VerticalAlignment="Center"
                                                  Margin="6,0,0,0"
                                                  HorizontalAlignment="Left"/>
 
-                                        <StackPanel Grid.Column="6" Orientation="Horizontal" Margin="0,0,8,0">
-                                            <Button Content="↑"
+										<StackPanel Grid.Column="6" Orientation="Horizontal" Margin="0,0,8,0">
+											<Button Content="↑"
                                                     Command="{Binding DataContext.MoveQuestionUpCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"
                                                     Background="#F3F4F6"
@@ -204,7 +209,7 @@
                                                     BorderThickness="0"
                                                     Padding="8,4" Margin="0,0,4,0"
                                                     Cursor="Hand" ToolTip="YUKARI TAŞI"/>
-                                            <Button Content="↓"
+											<Button Content="↓"
                                                     Command="{Binding DataContext.MoveQuestionDownCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"
                                                     Background="#F3F4F6"
@@ -212,9 +217,9 @@
                                                     BorderThickness="0"
                                                     Padding="8,4"
                                                     Cursor="Hand" ToolTip="AŞAĞI TAŞI"/>
-                                        </StackPanel>
+										</StackPanel>
 
-                                        <Button Grid.Column="8"
+										<Button Grid.Column="8"
                                                 Content="✕ Sil"
                                                 Command="{Binding DataContext.RemoveQuestionCommand,
                                                           RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -225,137 +230,133 @@
                                                 BorderThickness="1"
                                                 Padding="10,4"
                                                 Cursor="Hand"/>
-                                    </Grid>
+									</Grid>
 
-                                    <!-- Soru metni -->
-                                    <TextBlock Text="Soru Metni" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                    <TextBox Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}"
+									<TextBlock Text="Soru Metni" FontWeight="SemiBold" Margin="0,0,0,4"/>
+									<TextBox Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}"
                                              AcceptsReturn="True"
                                              TextWrapping="Wrap"
                                              MinHeight="60"
                                              Padding="8,6"
                                              Margin="0,0,0,12"/>
 
-                                    <!-- TEST SORUSU ALANLARI -->
-                                    <StackPanel Visibility="{Binding IsMultipleChoice, Converter={StaticResource BoolToVisibility}}">
-                                        <TextBlock Text="Şıklar" FontWeight="SemiBold" Margin="0,0,0,6"/>
+									<StackPanel Visibility="{Binding IsMultipleChoice, Converter={StaticResource BoolToVisibility}}">
+										<TextBlock Text="Şıklar" FontWeight="SemiBold" Margin="0,0,0,6"/>
 
-                                        <Grid Margin="0,0,0,4">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="10"/>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="A)" VerticalAlignment="Center"
+										<Grid Margin="0,0,0,4">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="10"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Grid.Column="0" Text="A)" VerticalAlignment="Center"
                                                        FontWeight="Bold"/>
-                                            <TextBox Grid.Column="1"
+											<TextBox Grid.Column="1"
                                                      Text="{Binding OptionA, UpdateSourceTrigger=PropertyChanged}"
                                                      Padding="6,4"/>
-                                            <TextBlock Grid.Column="3" Text="B)" VerticalAlignment="Center"
+											<TextBlock Grid.Column="3" Text="B)" VerticalAlignment="Center"
                                                        FontWeight="Bold"/>
-                                            <TextBox Grid.Column="4"
+											<TextBox Grid.Column="4"
                                                      Text="{Binding OptionB, UpdateSourceTrigger=PropertyChanged}"
                                                      Padding="6,4"/>
-                                        </Grid>
+										</Grid>
 
-                                        <Grid Margin="0,0,0,10">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="10"/>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="C)" VerticalAlignment="Center"
+										<Grid Margin="0,0,0,10">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="10"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Grid.Column="0" Text="C)" VerticalAlignment="Center"
                                                        FontWeight="Bold"/>
-                                            <TextBox Grid.Column="1"
+											<TextBox Grid.Column="1"
                                                      Text="{Binding OptionC, UpdateSourceTrigger=PropertyChanged}"
                                                      Padding="6,4"/>
-                                            <TextBlock Grid.Column="3" Text="D)" VerticalAlignment="Center"
+											<TextBlock Grid.Column="3" Text="D)" VerticalAlignment="Center"
                                                        FontWeight="Bold"/>
-                                            <TextBox Grid.Column="4"
+											<TextBox Grid.Column="4"
                                                      Text="{Binding OptionD, UpdateSourceTrigger=PropertyChanged}"
                                                      Padding="6,4"/>
-                                        </Grid>
+										</Grid>
 
-                                        <Grid Margin="0,0,0,10">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="10"/>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="E)" VerticalAlignment="Center"
+										<Grid Margin="0,0,0,10">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="10"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="*"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Grid.Column="0" Text="E)" VerticalAlignment="Center"
                                                        FontWeight="Bold"/>
-                                            <TextBox Grid.Column="1"
+											<TextBox Grid.Column="1"
                                                      Text="{Binding OptionE, UpdateSourceTrigger=PropertyChanged}"
                                                      Padding="6,4"/>
-                                        </Grid>
+										</Grid>
 
-                                        <TextBlock Text="Doğru Şık" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                            <RadioButton Content="A" Margin="0,0,16,0" FontWeight="Bold"
+										<TextBlock Text="Doğru Şık" FontWeight="SemiBold" Margin="0,0,0,4"/>
+										<StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+											<RadioButton Content="A" Margin="0,0,16,0" FontWeight="Bold"
                                                          IsChecked="{Binding CorrectOption,
                                                              Converter={StaticResource EnumEquals},
                                                              ConverterParameter=A}"/>
-                                            <RadioButton Content="B" Margin="0,0,16,0" FontWeight="Bold"
+											<RadioButton Content="B" Margin="0,0,16,0" FontWeight="Bold"
                                                          IsChecked="{Binding CorrectOption,
                                                              Converter={StaticResource EnumEquals},
                                                              ConverterParameter=B}"/>
-                                            <RadioButton Content="C" Margin="0,0,16,0" FontWeight="Bold"
+											<RadioButton Content="C" Margin="0,0,16,0" FontWeight="Bold"
                                                          IsChecked="{Binding CorrectOption,
                                                              Converter={StaticResource EnumEquals},
                                                              ConverterParameter=C}"/>
-                                            <RadioButton Content="D" Margin="0,0,16,0" FontWeight="Bold"
+											<RadioButton Content="D" Margin="0,0,16,0" FontWeight="Bold"
                                                          IsChecked="{Binding CorrectOption,
                                                              Converter={StaticResource EnumEquals},
                                                              ConverterParameter=D}"/>
-                                            <RadioButton Content="E" Margin="0,0,16,0" FontWeight="Bold"
+											<RadioButton Content="E" Margin="0,0,16,0" FontWeight="Bold"
                                                          IsChecked="{Binding CorrectOption,
                                                              Converter={StaticResource EnumEquals},
                                                              ConverterParameter=E}"/>
-                                        </StackPanel>
-                                    </StackPanel>
+										</StackPanel>
+									</StackPanel>
 
-                                    <!-- KLASİK SORU ALANLARI -->
-                                    <StackPanel Visibility="{Binding IsOpenEnded, Converter={StaticResource BoolToVisibility}}">
-                                        <TextBlock Text="Cevap Anahtarı / Notlandırma Rehberi"
+									<StackPanel Visibility="{Binding IsOpenEnded, Converter={StaticResource BoolToVisibility}}">
+										<TextBlock Text="Cevap Anahtarı / Notlandırma Rehberi"
                                                    FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                        <TextBox Text="{Binding AnswerKey, UpdateSourceTrigger=PropertyChanged}"
+										<TextBox Text="{Binding AnswerKey, UpdateSourceTrigger=PropertyChanged}"
                                                  AcceptsReturn="True"
                                                  TextWrapping="Wrap"
                                                  MinHeight="60"
                                                  Padding="8,6"
                                                  Margin="0,0,0,12"/>
-                                    </StackPanel>
+									</StackPanel>
 
-                                    <!-- KONU SEÇİMİ -->
-                                    <TextBlock Text="Konular (Bologna Çıktıları)" FontWeight="SemiBold" Margin="0,0,0,4"/>
+									<TextBlock Text="Konular (Bologna Çıktıları)" FontWeight="SemiBold" Margin="0,0,0,4"/>
 
-                                    <Grid Margin="0,0,0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <ComboBox Grid.Column="0"
+									<Grid Margin="0,0,0,8">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="Auto"/>
+										</Grid.ColumnDefinitions>
+										<ComboBox Grid.Column="0"
                                                   ItemsSource="{Binding AvailableTopics}"
                                                   SelectedItem="{Binding TopicToAdd}"
                                                   Padding="8,4" VerticalAlignment="Center">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="H" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                        <TextBlock Text="{Binding WeekNumber}" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                        <TextBlock Text=" — "/>
-                                                        <TextBlock Text="{Binding Title}"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <Button Grid.Column="1"
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<StackPanel Orientation="Horizontal">
+														<TextBlock Text="H" Foreground="{StaticResource TextSecondaryBrush}"/>
+														<TextBlock Text="{Binding WeekNumber}" Foreground="{StaticResource TextSecondaryBrush}"/>
+														<TextBlock Text=" — "/>
+														<TextBlock Text="{Binding Title}"/>
+													</StackPanel>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+										<Button Grid.Column="1"
                                                 Content="+ Ekle"
                                                 Command="{Binding AddTopicCommand}"
                                                 Background="{StaticResource SuccessBrush}"
@@ -364,27 +365,27 @@
                                                 BorderThickness="0"
                                                 Margin="8,0,0,0"
                                                 Cursor="Hand"/>
-                                    </Grid>
+									</Grid>
 
-                                    <ItemsControl ItemsSource="{Binding SelectedTopics}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Background="#DBEAFE" CornerRadius="4"
+									<ItemsControl ItemsSource="{Binding SelectedTopics}">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<WrapPanel/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Background="#DBEAFE" CornerRadius="4"
                                                         Padding="8,4" Margin="0,0,6,6">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Foreground="#1E3A8A" FontSize="12"
+													<StackPanel Orientation="Horizontal">
+														<TextBlock Foreground="#1E3A8A" FontSize="12"
                                                                    VerticalAlignment="Center">
-                                                            <Run Text="H"/>
-                                                            <Run Text="{Binding WeekNumber}"/>
-                                                            <Run Text=" — "/>
-                                                            <Run Text="{Binding Title}"/>
-                                                        </TextBlock>
-                                                        <Button Content="×"
+															<Run Text="H"/>
+															<Run Text="{Binding WeekNumber}"/>
+															<Run Text=" — "/>
+															<Run Text="{Binding Title}"/>
+														</TextBlock>
+														<Button Content="×"
                                                                 Command="{Binding DataContext.RemoveTopicCommand,
                                                                           RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}}"
                                                                 CommandParameter="{Binding}"
@@ -395,41 +396,38 @@
                                                                 Padding="2,0"
                                                                 Cursor="Hand"
                                                                 FontWeight="Bold"/>
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+													</StackPanel>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
 
-                <!-- Sorun yok mesajı: hiç soru yoksa -->
-                <Border Style="{StaticResource CardStyle}"
-                        Visibility="{Binding Questions.Count, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}">
-                    <TextBlock Text="Henüz soru eklenmedi. Alt kısımdan '+ Soru Ekle' butonuna tıklayarak başlayın."
+				<Border Style="{StaticResource CardStyle}"
+                        Visibility="{Binding Questions.Count, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}" Margin="0,16,0,0">
+					<TextBlock Text="Henüz soru eklenmedi. Alt kısımdan '+ Soru Ekle' butonuna tıklayarak başlayın."
                                HorizontalAlignment="Center"
                                Foreground="{StaticResource TextSecondaryBrush}"
                                FontStyle="Italic"
                                Padding="20"/>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
 
-        <!-- ALT BAR: HATA/BAŞARI MESAJI + KAYDET -->
-        <Border Grid.Row="2" Background="White" BorderBrush="{StaticResource BorderBrush}"
+		<Border Grid.Row="2" Background="White" BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,12,0,0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
 
-                <!-- Soru Ekle Butonu (Sola Taraf) -->
-                <Button Grid.Column="0"
+				<Button Grid.Column="0"
                         Content="+ Soru Ekle"
                         Command="{Binding AddQuestionCommand}"
                         Background="{StaticResource PrimaryBrush}"
@@ -439,33 +437,31 @@
                         VerticalAlignment="Center"
                         Cursor="Hand"
                         Margin="0,0,16,0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
+					<Button.Resources>
+						<Style TargetType="Border">
+							<Setter Property="CornerRadius" Value="4"/>
+						</Style>
+					</Button.Resources>
+				</Button>
 
-                <!-- Hata / Başarı mesajı (Orta Kısım) -->
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <Border Background="#FEE2E2"
+				<StackPanel Grid.Column="1" VerticalAlignment="Center">
+					<Border Background="#FEE2E2"
                             BorderBrush="{StaticResource DangerBrush}" BorderThickness="1"
                             CornerRadius="4" Padding="12,8"
                             Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVisibility}}">
-                        <TextBlock Text="{Binding ErrorMessage}"
+						<TextBlock Text="{Binding ErrorMessage}"
                                    Foreground="#991B1B" TextWrapping="Wrap"/>
-                    </Border>
-                    <Border Background="#D1FAE5"
+					</Border>
+					<Border Background="#D1FAE5"
                             BorderBrush="{StaticResource SuccessBrush}" BorderThickness="1"
                             CornerRadius="4" Padding="12,8"
                             Visibility="{Binding SuccessMessage, Converter={StaticResource BoolToVisibility}}">
-                        <TextBlock Text="{Binding SuccessMessage}"
+						<TextBlock Text="{Binding SuccessMessage}"
                                    Foreground="#064E3B" TextWrapping="Wrap"/>
-                    </Border>
-                </StackPanel>
+					</Border>
+				</StackPanel>
 
-                <!-- Sınavı Kaydet Butonu (Sağa Taraf) -->
-                <Button Grid.Column="2"
+				<Button Grid.Column="2"
                         Content="💾 Sınavı Kaydet"
                         Command="{Binding SaveCommand}"
                         IsEnabled="{Binding IsSaving, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}"
@@ -476,7 +472,7 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         Margin="16,0,0,0"/>
-            </Grid>
-        </Border>
-    </Grid>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>
